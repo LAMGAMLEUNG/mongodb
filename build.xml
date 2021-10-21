@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<project name="complieJava" default="complie">
+
+<!-- lib 路径 -->
+<property name="libs" value="./lib"></property>
+<!-- sources路径 -->
+<property name="sources" value="./src/main/java"></property>
+<!-- resources路径 -->
+<property name="resources" value="./src/main/resources"></property>
+<!-- target路径 -->
+<property name="target" value="./target/classes"></property>
+
+<!-- 编译时使用的ClassPath -->
+<path id="classpath">
+    <fileset dir="${libs}">
+        <include name="*.jar" />
+    </fileset>
+</path>
+
+<target name="complie" >
+    <!-- 删除文件 -->
+    <delete dir="${target}" />
+
+     <!-- 复制resources文件 -->
+    <copy todir="${target}" overwrite="true">
+        <fileset dir="${resources}">
+        </fileset>
+    </copy>
+
+    <!-- 编译java文件 -->
+    <javac srcdir="${sources}" encoding="UTF-8" destdir="${target}"  debug="on" optimize="on" >
+        <classpath refid="classpath"/>
+    </javac>
+</target>
+
+</project>

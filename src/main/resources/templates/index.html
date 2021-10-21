@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>MongoDB 文件上传</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 引入 ElementUI 样式 -->
+    <link rel="stylesheet" href="element-ui@2.15.6/theme-chalk/index.css">
+    <script>
+        /* 定义全局变量ctx, 获取上下文路径, 需要引入 unbescape 包 */
+        var ctx = '[[@{/}]]';
+    </script>
+
+    <style>
+        /* 设置垂直水平居中(适用于宽高未知的情况) */
+        .uplaod-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .file-list {
+            width: 100%;
+            position: relative;
+            margin: 20px 10px 10px 0;
+            font-size: 20px;
+            color: rgba(60, 62, 66, .7);
+            line-height: 1.8;
+        }
+
+        .file {
+            margin-right: 8px;
+        }
+
+        .butn {
+            float: right;
+        }
+
+        .del {
+            padding-right: 10px;
+            color: rgba(255, 0, 0, .6);
+            cursor: pointer;
+        }
+
+        .prev {
+            color: rgba(0, 0, 255, .6);
+            padding-right: 10px;
+            cursor: pointer;
+        }
+
+        .down {
+            color: rgba(0, 0, 0, 1);
+            padding-right: 10px;
+            cursor: pointer;
+        }
+
+        .fileType {
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="uplaod-box">
+        <el-upload
+                class="upload-demo"
+                drag
+                action="/fileUtilsMongo/uploadFile"
+                :multiple="true"
+                :show-file-list="false"
+                :limit="limit"
+                :on-exceed="handleExceed"
+                :before-upload="beforeAvatarUpload"
+                :http-request="uploadFile">
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip" slot="tip">支持上传文件格式：doc，docx，ppt，pptx，xls，xlsx，pdf，单个文件大小在100M以内</div>
+        </el-upload>
+
+        <div class="file-list">
+            <div v-for="item in fileList">
+                <div>
+                    <i class="el-icon-document file"></i><span>{{item.name}}<span class="fileType">{{item.type}}</span></span>
+
+                    <span class="butn">
+                        <el-tooltip effect="light" content="预览">
+                            <i class="el-icon-search prev" @click="previewFile(item.url, item.type)"></i>
+                        </el-tooltip>
+
+                        <el-tooltip effect="light" content="下载">
+                            <i class="el-icon-download down" @click="downloadFile(item.url)"></i>
+                        </el-tooltip>
+
+                        <el-tooltip effect="light" content="删除">
+                            <i class="el-icon-delete del" @click="delFile(item.mongoId)"></i>
+                        </el-tooltip>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <el-dialog title="文件预览" :visible="showPdf || showImg" :width="fileWidth"
+               :before-close="closePreviewClick" center append-to-body>
+        <!-- 由于使用微软的在线预览 api, 要求文件的地址不能带端口号, 因此无法使用这种方式预览 doc, xls, ppt 文件 -->
+        <!--<div v-if="showDoc">
+            <iframe frameborder="0" :src="'https://view.officeapps.live.com/op/view.aspx?src=' + this.fileUrl"
+                    width='100%' height="800px">
+            </iframe>
+        </div>-->
+        <div v-if="showPdf" style="justify-content: center; align-items: center">
+            <embed :src="pdfUrl" style="width: 100%; height: 80vh"/>
+        </div>
+
+        <div v-if="showImg"
+             style="justify-content: center; align-items: center; min-width: 40px; min-height: 40px;">
+            <img :src="imagesUrl" alt="" style="width: 100%; height: auto;">
+        </div>
+    </el-dialog>
+</div>
+</body>
+
+<!--
+    注意: 需要先引入 vue, 再引入 elementUI, 否则浏览器控制台会报一个错
+    Cannot read properties of undefined (reading 'prototype')
+-->
+<!-- 引入 Vue -->
+<script src="vue@2.6.14/vue.js"></script>
+<!-- 引入 ElementUI 组件库 -->
+<script src="element-ui@2.15.6/index.js"></script>
+<!-- 引入 jQuery -->
+<script src="jquery@1.12.4/jquery.min.js"></script>
+<!-- 引入 Axios -->
+<script src="axios@0.20.0/axios.js"></script>
+<!-- 引入自定义组件 -->
+<script src="js/index.js"></script>
+</html>

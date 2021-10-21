@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mongodb.mapper.FileUploadToMongoMapper">
+    <resultMap id="BaseResultMap" type="com.demo.mongodb.domain.FileUploadToMongoInfo">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="master_id" property="masterId" jdbcType="VARCHAR"/>
+        <result column="prefix" property="prefix" jdbcType="VARCHAR"/>
+        <result column="suffix" property="suffix" jdbcType="VARCHAR"/>
+        <result column="file_type" property="fileType" jdbcType="VARCHAR"/>
+        <result column="file_name" property="fileName" jdbcType="VARCHAR"/>
+        <result column="file_size" property="fileSize" jdbcType="DOUBLE"/>
+        <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP"/>
+        <result column="mongo_id" property="mongoId" jdbcType="VARCHAR"/>
+        <result column="mongo_thum_id" property="mongoThumId" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="VARCHAR"/>
+        <result column="deleted_time" property="deletedTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, master_id, prefix, suffix, file_type, file_name, file_size, upload_time, mongo_id,
+        mongo_thum_id, is_deleted, deleted_time
+    </sql>
+
+    <insert id="insertSelective"
+            parameterType="com.demo.mongodb.domain.FileUploadToMongoInfo">
+        insert into file_upload_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="masterId != null">
+                master_id,
+            </if>
+            <if test="prefix != null">
+                prefix,
+            </if>
+            <if test="suffix != null">
+                suffix,
+            </if>
+            <if test="fileType != null">
+                file_type,
+            </if>
+            <if test="fileName != null">
+                file_name,
+            </if>
+            <if test="fileSize != null">
+                file_size,
+            </if>
+            <if test="uploadTime != null">
+                upload_time,
+            </if>
+            <if test="mongoId != null">
+                mongo_id,
+            </if>
+            <if test="mongoThumId != null">
+                mongo_thum_id,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="deletedTime != null">
+                deleted_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="masterId != null">
+                #{masterId,jdbcType=VARCHAR},
+            </if>
+            <if test="prefix != null">
+                #{prefix,jdbcType=VARCHAR},
+            </if>
+            <if test="suffix != null">
+                #{suffix,jdbcType=VARCHAR},
+            </if>
+            <if test="fileType != null">
+                #{fileType,jdbcType=VARCHAR},
+            </if>
+            <if test="fileName != null">
+                #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="fileSize != null">
+                #{fileSize,jdbcType=DOUBLE},
+            </if>
+            <if test="uploadTime != null">
+                #{uploadTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="mongoId != null">
+                #{mongoId,jdbcType=VARCHAR},
+            </if>
+            <if test="mongoThumId != null">
+                #{mongoThumId,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=VARCHAR},
+            </if>
+            <if test="deletedTime != null">
+                #{deletedTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="deleteFileByMongoId" parameterType="com.demo.mongodb.vo.FileUploadToMongoInfoVo">
+        update file_upload_info set is_deleted = '1', deleted_time = #{deletedTime}
+        where mongo_id in
+        <foreach collection="mongoIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="getThumidByMongoId" parameterType="java.lang.String" resultType="java.lang.String">
+        select mongo_thum_id from file_upload_info where mongo_id = #{mongoId}
+    </select>
+
+    <select id="getFilesByCustomize" parameterType="com.demo.mongodb.vo.FileUploadToMongoInfoVo"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from file_upload_info
+        where is_deleted = '0'
+        <if test="masterId != null and masterId != ''">
+            and master_id = #{masterId}
+        </if>
+        <if test="prefix != null and prefix != ''">
+            and prefix = #{prefix}
+        </if>
+        <if test="suffix != null and suffix != ''">
+            and suffix = #{suffix}
+        </if>
+        <if test="fileType != null and fileType != ''">
+            and file_type = #{fileType}
+        </if>
+        <if test="fileName != null and fileName != ''">
+            and file_name = #{fileName}
+        </if>
+        order by upload_time desc
+    </select>
+</mapper>

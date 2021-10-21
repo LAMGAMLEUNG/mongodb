@@ -1,0 +1,11 @@
+
+complie:
+   [delete] Deleting directory D:\Dev\Code\IdeaProjects\mongodb\target\classes
+     [copy] Copying 599 files to D:\Dev\Code\IdeaProjects\mongodb\target\classes
+    [javac] D:\Dev\Code\IdeaProjects\mongodb\build.xml:31: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 12 source files to D:\Dev\Code\IdeaProjects\mongodb\target\classes
+    [javac] 注: D:\Dev\Code\IdeaProjects\mongodb\src\main\java\com\demo\mongodb\service\impl\FileUploadToMongoServiceImpl.java使用了未经检查或不安全的操作。
+    [javac] 注: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+
+BUILD SUCCESSFUL
+Total time: 1 second
