@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>MongoDB 文件上传</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- 引入 ElementUI 样式 -->
-    <link rel="stylesheet" href="element-ui@2.15.6/theme-chalk/index.css">
+    <link rel="stylesheet" th:href="@{/element-ui/2.15.6/theme-chalk/index.css}">
     <script>
         /* 定义全局变量ctx, 获取上下文路径, 需要引入 unbescape 包 */
         var ctx = '[[@{/}]]';
@@ -127,13 +127,14 @@
     Cannot read properties of undefined (reading 'prototype')
 -->
 <!-- 引入 Vue -->
-<script src="vue@2.6.14/vue.js"></script>
+<script th:src="@{/vue/2.6.14/vue.js}"></script>
 <!-- 引入 ElementUI 组件库 -->
-<script src="element-ui@2.15.6/index.js"></script>
+<script th:src="@{/element-ui/2.15.6/index.js}"></script>
 <!-- 引入 jQuery -->
-<script src="jquery@1.12.4/jquery.min.js"></script>
+<script th:src="@{/jquery/1.12.4/jquery.min.js}"></script>
 <!-- 引入 Axios -->
-<script src="axios@0.20.0/axios.js"></script>
+<script th:src="@{/axios/0.20.0/axios.js}"></script>
 <!-- 引入自定义组件 -->
-<script src="js/index.js"></script>
+<script th:src="@{/js/index.js}"></script>
+
 </html>
